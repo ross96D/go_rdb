@@ -1,4 +1,4 @@
-module github.com/ross96D/go-rdb
+module github.com/ross96D/go_rdb
 
 go 1.23.0
 
