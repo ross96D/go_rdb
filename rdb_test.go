@@ -44,3 +44,8 @@ func TestDatabase(t *testing.T) {
 	assert.Equal(t, []byte(nil), db.Search("key3"))
 	assert.Equal(t, []byte(nil), db.Search("key4"))
 }
+
+func TestDatabaseASD(t *testing.T) {
+	_, err := rdb.New("not/a/valid/path")
+	require.Error(t, err)
+}

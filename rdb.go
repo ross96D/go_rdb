@@ -26,23 +26,30 @@ func New(path string) (Database, error) {
 
 }
 
-func (db Database) Insert(key string, value []byte) {
+func (db Database) Insert(key string, value []byte) bool {
 	ckey := C.CString(key)
 	defer C.free(unsafe.Pointer(ckey))
 
 	ptr := unsafe.Pointer(&value[0])
 	len := len(value)
-	C.insert(db.pointer, ckey, C.struct_Bytes{ptr: (*C.char)(ptr), len: C.uint64_t(len)})
-
+	valueBytes := C.struct_Bytes{
+		ptr: (*C.char)(ptr),
+		len: C.uint64_t(len),
+	}
+	return bool(C.insert(db.pointer, ckey, valueBytes))
 }
 
-func (db Database) Update(key string, value []byte) {
+func (db Database) Update(key string, value []byte) bool {
 	ckey := C.CString(key)
 	defer C.free(unsafe.Pointer(ckey))
 
 	ptr := unsafe.Pointer(&value[0])
 	len := len(value)
-	C.update(db.pointer, ckey, C.struct_Bytes{ptr: (*C.char)(ptr), len: C.uint64_t(len)})
+	valueBytes := C.struct_Bytes{
+		ptr: (*C.char)(ptr),
+		len: C.uint64_t(len),
+	}
+	return bool(C.update(db.pointer, ckey, valueBytes))
 }
 
 func (db Database) Search(key string) []byte {
@@ -58,9 +65,9 @@ func (db Database) Search(key string) []byte {
 	return b
 }
 
-func (db Database) Delete(key string) {
+func (db Database) Delete(key string) bool {
 	ckey := C.CString(key)
 	defer C.free(unsafe.Pointer(ckey))
 
-	C.delete(db.pointer, ckey)
+	return bool(C.delete(db.pointer, ckey))
 }
