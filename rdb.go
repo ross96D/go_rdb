@@ -53,7 +53,6 @@ func (db Database) Search(key string) []byte {
 	if result.ptr == nil {
 		return nil
 	}
-	println(result.ptr, result.len, unsafe.Pointer(result.ptr), unsafe.Pointer(result.ptr) == nil)
 	b := C.GoBytes(unsafe.Pointer(result.ptr), C.int(result.len))
 
 	return b
